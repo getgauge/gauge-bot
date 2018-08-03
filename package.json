@@ -1,0 +1,40 @@
+{
+  "name": "gauge-bot",
+  "version": "1.0.0",
+  "description": "A Probot app",
+  "author": "BugDiver <vinaysh@thoughtworks.com>",
+  "license": "ISC",
+  "repository": "https://github.com/getgauge/gauge-bot.git",
+  "homepage": "https://github.com/getgauge/gauge-bot",
+  "bugs": "https://github.com/getgauge/gauge-bot/issues",
+  "keywords": [
+    "probot",
+    "github",
+    "probot-app"
+  ],
+  "scripts": {
+    "dev": "nodemon --exec \"npm start\"",
+    "start": "probot run ./index.js",
+    "lint": "standard --fix"
+  },
+  "dependencies": {
+    "@octokit/rest": "^15.9.5",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "passport": "^0.4.0",
+    "passport-github": "^1.1.0",
+    "pg": "^7.4.3",
+    "probot": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.2",
+    "smee-client": "^1.0.2",
+    "standard": "^10.0.3"
+  },
+  "engines": {
+    "node": ">= 8.3.0"
+  }
+}
