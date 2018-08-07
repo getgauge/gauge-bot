@@ -7,7 +7,7 @@ async function createStatus(context, state, recheck) {
   if (state) {
     if (recheck) await comments.addComment(context, messages.claVerified());
     let number = context.payload.pull_request.number;;
-    await labels.add(context, number, 'cla-sigened', '1CA50F');
+    await labels.add(context, number, 'cla-signed', '1CA50F');
     await labels.add(context, number, 'ready', 'e6e6e6');
   }
   let status = context.repo({
