@@ -31,8 +31,10 @@ async function prCreated(context, recheck) {
     base: context.payload.pull_request.base.sha,
     head: context.payload.pull_request.head.sha
   }));
+  console.log(compare.data);
   let unsignedUsers = [];
   for (const { author, committer } of compare.data.commits) {
+    if(!author || !committer) continue;
     let authorLogin = author.login;
     let committerLogin = committer.login;
     if (authorLogin !== committerLogin && committerLogin !== 'web-flow') {
