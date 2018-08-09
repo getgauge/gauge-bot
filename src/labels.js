@@ -1,3 +1,6 @@
+const comments = require('./comments');
+const messages = require('./messages');
+
 async function hasLabel(context, issueNumber, label) {
     let config = context.repo({ number: issueNumber });
     let labels = await context.github.issues.getIssueLabels(config);
@@ -13,6 +16,12 @@ module.exports = {
             await context.github.issues.createLabel(context.repo({ name: label, color: color }));
         }
         return context.github.issues.addLabels(context.repo({ number: issueNumber, labels: [label] }));
+    },
+
+    onLabelAdded: async function (context) {
+        if (context.payload.label.name === 'ready for QA') {
+            await comments.addComment(context, messages.nightlyComment());
+        }
     }
 }
 

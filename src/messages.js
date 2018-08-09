@@ -11,5 +11,9 @@ module.exports = {
         return 'This PR has been verified.' +
             ' The gauge team will be looking into this soon.' +
             '\n\n/cc @getgauge/core';
+    },
+
+    nightlyComment: function (date) {
+        return 'The fix should be available in nightly >= ' + new Date().toLocaleDateString();
     }
 }
