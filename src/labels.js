@@ -1,6 +1,8 @@
 const comments = require('./comments');
 const messages = require('./messages');
 
+const excludeRepoForNightlyComment = ['taiko', 'screenshot', 'gauge_screenshot'];
+
 async function hasLabel(context, issueNumber, label) {
     let config = context.repo({ number: issueNumber });
     let labels = await context.github.issues.getIssueLabels(config);
@@ -19,6 +21,7 @@ module.exports = {
     },
 
     onLabelAdded: async function (context) {
+        if (excludeRepoForNightlyComment.includes(comments.payload.repository.name)) return;
         if (context.payload.label.name === 'ready for QA') {
             await comments.addComment(context, messages.nightlyComment());
         }

@@ -13,7 +13,9 @@ module.exports = {
             '\n\n/cc @getgauge/core';
     },
 
-    nightlyComment: function (date) {
-        return 'The fix should be available in nightly >= ' + new Date().toLocaleDateString();
+    nightlyComment: function () {
+        let d = new Date();
+        let dateString = [d.getDate(), d.getMonth(), d.getFullYear()].join('-');
+        return 'The fix should be available in nightly >= ' + dateString;
     }
 }
