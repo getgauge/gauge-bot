@@ -21,7 +21,7 @@ module.exports = {
     },
 
     onLabelAdded: async function (context) {
-        if (excludeRepoForNightlyComment.includes(comments.payload.repository.name)) return;
+        if (excludeRepoForNightlyComment.includes(context.payload.repository.name)) return;
         if (context.payload.label.name === 'ready for QA') {
             await comments.addComment(context, messages.nightlyComment());
         }
