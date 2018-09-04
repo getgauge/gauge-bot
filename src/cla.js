@@ -79,7 +79,7 @@ function addContributor (profile) {
     email: profile.email || '',
     nickname: profile.login,
     userID: profile.id || '',
-    description: profile.bio.replace(/'/g,"''") || '',
+    description:profile.bio && profile.bio.replace(/'/g,"''") || '',
     time: new Date().toLocaleDateString()
   }
   data.addUser(user);
