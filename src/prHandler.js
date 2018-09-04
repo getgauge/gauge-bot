@@ -23,8 +23,9 @@ async function updatePR(context, logins, recheck) {
   if (logins.length === 0) return createStatus(context, true, recheck);
   let users = [];
   logins.forEach(u => {
-    if (!users.includes(u))
-      users.push(`@${u}`)
+    let user = `@${u}`;
+    if (!users.includes(user))
+      users.push(user);
   });
   await comments.addComment(context, messages.claNotice(users.join(', ')));
   return createStatus(context, false);
