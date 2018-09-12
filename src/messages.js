@@ -15,7 +15,7 @@ module.exports = {
 
     nightlyComment: function () {
         let d = new Date();
-        let dateString = [d.getDate(), d.getMonth(), d.getFullYear()].join('-');
+        let dateString = [d.getDate(), d.getMonth()+1, d.getFullYear()].join('-');
         return 'The fix should be available in nightly >= ' + dateString;
     }
 }
