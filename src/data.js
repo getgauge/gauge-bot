@@ -23,7 +23,7 @@ module.exports = {
       if (await this.hasSignedCLA(user.nickname)) return;
       client = await getClient();
       q = `INSERT INTO contributors
-      VALUES ('${user.name}','${user.email}','${user.nickname}','${user.userID}','${user.description.replace(/'/, "")}','${user.time}')`;
+      VALUES ('${user.name}','${user.email}','${user.nickname}','${user.userID}','${user.description}','${user.time}')`;
       await client.query(q);
       await client.end();
     } catch (e) {
