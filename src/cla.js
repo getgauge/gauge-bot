@@ -66,7 +66,7 @@ async function contributorHandler (req, res) {
   let c = req.query.checkContributor;
   if (c) {
     let user = await data.getContributor(c);
-    let response = user ? { hasSignedCLA: true, info: user } : c + ' has not sigend the cla.';
+    let response = user ? { hasSignedCLA: true, info: user } : c + ' has not signed the cla.';
     res.send(response);
   } else {
     res.send(`Please use the url ${req.headers.host}/contributor/checkContributor?CONTRIBUTOR_NAME`);
