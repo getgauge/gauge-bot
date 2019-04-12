@@ -7,9 +7,8 @@ async function isOrgMember(context, user) {
 }
 
 module.exports = async function issueOpened(context) {
-  let isMemeber = await isOrgMember(context, context.payload.issue.user.login);
-  if (!isMemeber) {
-    await labels.add(context, context.payload.issue.number, 'community', 'e6e6e6');
+  let isMember = await isOrgMember(context, context.payload.issue.user.login);
+  if (!isMember) {
     await projects.createSupportCard(context, context.payload.issue.number);
   }
 };
