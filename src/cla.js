@@ -116,7 +116,7 @@ function configurePassport (route) {
   passport.use(new GithubStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: '/auth/github/callback'
+    callbackURL: `${process.env.APP_URL}/auth/github/callback`
   }, function (accessToken, _refreshToken, profile, done) {
     done(null, { accessToken: accessToken, profile: profile });
   }));
