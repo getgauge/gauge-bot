@@ -20,7 +20,9 @@ async function createStatus(context, state, recheck) {
 }
 
 async function updatePR(context, logins, recheck) {
-  if (logins.length === 0) return createStatus(context, true, recheck);
+  if (logins.length === 0 || (logins.length === 1 && logins[0].includes('[bot]'))) {
+    return createStatus(context, true, recheck);
+  }
   let users = [];
   logins.forEach(u => {
     let user = `@${u}`;
@@ -38,7 +40,7 @@ async function prCreated(context, recheck) {
   }));
   let unsignedUsers = [];
   for (const { author, committer } of compare.data.commits) {
-    if(!author || !committer) continue;
+    if (!author || !committer) continue;
     let authorLogin = author.login;
     let committerLogin = committer.login;
     if (authorLogin !== committerLogin && committerLogin !== 'web-flow') {
