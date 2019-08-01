@@ -1,15 +1,15 @@
-backup_file="backup.json"
+backup_file="$(date '+%F')_cla_backup.json"
 
 get_contributors() {
     curl "$APP_URL/$CONTRIBUTOR_URL" > $backup_file
 }
 
 post_contributors() {
-    curl -H "Authorization: Bearer $DROPBOX_ACCESS_TOKEN" https://api-content.dropbox.com/1/files_put/auto/ -T  $backup_file
+    aws s3 cp $backup_file "s3://$BACKUP_BUCKET_NAME"
 }
 
 remove_backup() {
-    rm -r ./backup.json
+    rm -r $backup_file
 }
 
 get_contributors
