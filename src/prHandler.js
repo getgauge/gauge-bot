@@ -5,8 +5,10 @@ const data = require('./data')
 
 async function createStatus(context, state, recheck) {
   if (state) {
-    if (recheck) await comments.addComment(context, messages.claVerified());
-    let number = context.payload.pull_request.number;;
+    const ownerLogin = context.payload.organization.login;
+    const repoName = context.payload.repository.name;  
+    let number = context.payload.pull_request.number;
+    if (recheck) await comments.addComment(context, messages.claVerified(), ownerLogin, repoName, number);
     await labels.add(context, number, 'cla-signed', '1CA50F');
   }
   let status = context.repo({
@@ -20,7 +22,10 @@ async function createStatus(context, state, recheck) {
 
 async function updateClaStatusForUnsignedUsers(context, unsignedUsers) {
   let users = unsignedUsers.map(u => `@${u}`);
-  await comments.addComment(context, messages.claNotice(users.join(', ')));
+  const ownerLogin = context.payload.organization.login;
+  const repoName = context.payload.repository.name;
+  let number = context.payload.pull_request.number;
+  await comments.addComment(context, messages.claNotice(users.join(', ')), ownerLogin, repoName, number);
   return createStatus(context, false);
 }
 
