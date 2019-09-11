@@ -20,7 +20,7 @@ module.exports = {
         const orgName = matches[1];
         const repoName = matches[2];
         const issueID = matches[3];
-        comments.addComment(context, messages.nightlyComment(), orgName, repoName, issueID);
+        await comments.addComment(context, messages.nightlyComment(), orgName, repoName, issueID);
     }
 }
 
