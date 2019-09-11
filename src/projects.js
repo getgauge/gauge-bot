@@ -4,9 +4,9 @@ module.exports = {
         let issueId = context.payload.issue.id;
         let projectID = (await p.listForOrg({ org: "getgauge", state: "open" }))
             .data.find(d => d.name == 'Support').id;
-        let columnID = (await p.listColumns({ project_id: projectID }))
+        let raisedColumnID = (await p.listColumns({ project_id: projectID }))
             .data.find(c => c.name == 'Raised').id;
-        await p.createCard({ column_id: columnID, content_id: issueId, content_type: 'Issue' });
+        await p.createCard({ column_id: raisedColumnID, content_id: issueId, content_type: 'Issue' });
     },
 }
 
