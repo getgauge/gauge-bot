@@ -8,7 +8,6 @@ async function createStatus(context, state, recheck) {
     if (recheck) await comments.addComment(context, messages.claVerified());
     let number = context.payload.pull_request.number;;
     await labels.add(context, number, 'cla-signed', '1CA50F');
-    await labels.add(context, number, 'ready', 'e6e6e6');
   }
   let status = context.repo({
     state: state ? 'success' : 'failure',
@@ -19,12 +18,12 @@ async function createStatus(context, state, recheck) {
   return context.github.repos.createStatus(status);
 }
 
-async function updatePR(context, logins, recheck) {
-  if (logins.length === 0 || (logins.length === 1 && logins[0].includes('[bot]'))) {
+async function updatePR(context, unsignedUsers, recheck) {
+  if (unsignedUsers.length === 0 || (unsignedUsers.length === 1 && unsignedUsers[0].includes('[bot]'))) {
     return createStatus(context, true, recheck);
   }
   let users = [];
-  logins.forEach(u => {
+  unsignedUsers.forEach(u => {
     let user = `@${u}`;
     if (!users.includes(user))
       users.push(user);
