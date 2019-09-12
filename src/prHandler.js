@@ -41,6 +41,7 @@ async function prCreated(context, recheck) {
 
 async function createPullRequestReview(context, users) {
   if (context.payload.action !== 'opened') return;
+  if (isBotUser(context.payload.pull_request.user.login)) return;
   const ownerLogin = context.payload.organization.login;
   const repoName = context.payload.repository.name;
   let reviewTeam = (await context.github.repos.listTeams({owner: ownerLogin, repo: repoName}))
@@ -60,7 +61,7 @@ async function createPullRequestReview(context, users) {
 async function getUnsignedUsers(users) {
   let unsignedUsers = [];
   for (let user of users) {
-    if (!user.includes('[bot]') && !(await data.hasSignedCLA(user))){
+    if (!isBotUser(user) && !(await data.hasSignedCLA(user))){
       unsignedUsers.push(user);
     }
   }

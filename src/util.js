@@ -5,5 +5,9 @@ module.exports = {
 
   isPRComment: function (payload) {
     return !!payload.issue.pull_request;
+  },
+
+  isBotUser: function(user) {
+    return user.includes('[bot]')
   }
 };

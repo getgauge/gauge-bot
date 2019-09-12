@@ -125,11 +125,11 @@ function configurePassport (route) {
 }
 
 module.exports = function (app) {
-  let route = app.route();
-  route.use(cookieParser());
-  route.use(bodyParser.urlencoded({ extended: false }));
-  route.use(session({ secret: 'guagebot' }));
-  configurePassport(route);
-  configureHandlers(route);
+  // let route = app.route();
+  // route.use(cookieParser());
+  // route.use(bodyParser.urlencoded({ extended: false }));
+  // route.use(session({ secret: 'guagebot' }));
+  // configurePassport(route);
+  // configureHandlers(route);
 }
 
