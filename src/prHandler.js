@@ -31,7 +31,7 @@ async function updateClaStatusForUnsignedUsers(context, unsignedUsers) {
 
 async function prCreated(context, recheck) {
   let users = await getCommitUsers(context);
-  let unsignedUsers = getUnsignedUsers(users);
+  let unsignedUsers = await getUnsignedUsers(users);
   if (!unsignedUsers || unsignedUsers.length === 0) {
     await createStatus(context, true, recheck);
     return createPullRequestReview(context);
@@ -40,6 +40,7 @@ async function prCreated(context, recheck) {
 }
 
 async function createPullRequestReview(context, users) {
+  if (context.payload.action !== 'opened') return;
   const ownerLogin = context.payload.organization.login;
   const repoName = context.payload.repository.name;
   let reviewTeam = (await context.github.repos.listTeams({owner: ownerLogin, repo: repoName}))
