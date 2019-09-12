@@ -63,6 +63,7 @@ async function getUnsignedUsers(users) {
       unsignedUsers.push(user);
     }
   }
+  return unsignedUsers;
 }
 
 async function getCommitUsers(context) {
