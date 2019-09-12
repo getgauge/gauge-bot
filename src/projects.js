@@ -1,5 +1,6 @@
 const comments = require('./comments');
 const messages = require('./messages');
+const excludeRepoForNightlyComment = ['taiko', 'screenshot', 'gauge_screenshot', 'docs.gauge.org', 'gauge.org', 'gocd-yml-config', 'infrastructure', 'gauge-nightly-repository'];
 
 module.exports = {
     createSupportCard: async function (context) {
@@ -13,13 +14,14 @@ module.exports = {
     },
     cardMoved: async function(context) {
         if (!context.payload.project_card.content_url) return;
-        let columnName = (await context.github.projects.getColumn({column_id: context.payload.project_card.column_id})).data.name;
-        if (columnName !== "Testing") return;
         let matches = context.payload.project_card.content_url.match(/https?:\/\/api\.github\.com\/repos\/(.*)\/(.*)\/issues\/(\d*)/);
         if (!matches || matches.length != 4) return;
         const orgName = matches[1];
         const repoName = matches[2];
         const issueID = matches[3];
+        if (excludeRepoForNightlyComment.includes(repoName)) return;
+        let columnName = (await context.github.projects.getColumn({column_id: context.payload.project_card.column_id})).data.name;
+        if (columnName !== "Testing") return;
         await comments.addComment(context, messages.nightlyComment(), orgName, repoName, issueID);
     }
 }
