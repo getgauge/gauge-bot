@@ -33,7 +33,7 @@ async function updateClaStatusForUnsignedUsers(context, unsignedUsers) {
 async function prUpdated(context, recheck) {
   let users = await getCommitUsers(context);
   await updateClAStatus(users, context, recheck);
-  return createPullRequestReview(context, users);
+  return createPRReviewRequest(context, users);
 }
 
 async function updateClAStatus(users, context, recheck) {
@@ -44,13 +44,13 @@ async function updateClAStatus(users, context, recheck) {
   return updateClaStatusForUnsignedUsers(context, unsignedUsers, recheck);
 }
 
-async function createPullRequestReview(context, users) {
+async function createPRReviewRequest(context, users) {
   if (context.payload.action !== 'opened') return;
   if (isBotUser(context.payload.pull_request.user.login)) return;
   const ownerLogin = context.payload.organization.login;
   const repoName = context.payload.repository.name;
   let reviewTeam = (await context.github.repos.listTeams({owner: ownerLogin, repo: repoName}))
-    .data.find(team => team.name == "reviewers");
+    .data.find(team => team.name == "Reviewers");
   if (!reviewTeam) return;
   let members = (await context.github.teams.listMembers({team_id: reviewTeam.id})).data;
   let mem = members.filter(member => !users.includes(member.login));
