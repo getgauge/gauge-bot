@@ -1,6 +1,7 @@
 const labels = require('./labels');
 const comments = require('./comments');
 const messages = require('./messages');
+const { isBotUser } = require('./util')
 const data = require('./data')
 
 async function createStatus(context, state, recheck) {
@@ -31,13 +32,16 @@ async function updateClaStatusForUnsignedUsers(context, unsignedUsers) {
 
 async function prUpdated(context, recheck) {
   let users = await getCommitUsers(context);
+  await updateClAStatus(users, context, recheck);
+  return createPullRequestReview(context, users);
+}
+
+async function updateClAStatus(users, context, recheck) {
   let unsignedUsers = await getUnsignedUsers(users);
   if (!unsignedUsers || unsignedUsers.length === 0) {
-    await createStatus(context, true, recheck);
-  } else {
-    await updateClaStatusForUnsignedUsers(context, unsignedUsers, recheck)
+    return createStatus(context, true, recheck);
   }
-  return createPullRequestReview(context, users);
+  return updateClaStatusForUnsignedUsers(context, unsignedUsers, recheck);
 }
 
 async function createPullRequestReview(context, users) {
