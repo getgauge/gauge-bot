@@ -29,14 +29,15 @@ async function updateClaStatusForUnsignedUsers(context, unsignedUsers) {
   return createStatus(context, false);
 }
 
-async function prCreated(context, recheck) {
+async function prUpdated(context, recheck) {
   let users = await getCommitUsers(context);
   let unsignedUsers = await getUnsignedUsers(users);
   if (!unsignedUsers || unsignedUsers.length === 0) {
     await createStatus(context, true, recheck);
-    return createPullRequestReview(context, users);
+  } else {
+    await updateClaStatusForUnsignedUsers(context, unsignedUsers, recheck)
   }
-  return updateClaStatusForUnsignedUsers(context, unsignedUsers, recheck)
+  return createPullRequestReview(context, users);
 }
 
 async function createPullRequestReview(context, users) {
@@ -86,4 +87,4 @@ async function getCommitUsers(context) {
   return users;
 }
 
-module.exports = prCreated;
+module.exports = prUpdated;
