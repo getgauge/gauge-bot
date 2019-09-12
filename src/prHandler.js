@@ -51,7 +51,10 @@ async function createPRReviewRequest(context, users) {
   const repoName = context.payload.repository.name;
   let reviewTeam = (await context.github.repos.listTeams({owner: ownerLogin, repo: repoName}))
     .data.find(team => team.name == "Reviewers");
-  if (!reviewTeam) return;
+  if (!reviewTeam) {
+    context.log("Cannot find team with name 'Reviewers'");
+    return;
+  }
   let members = (await context.github.teams.listMembers({team_id: reviewTeam.id})).data;
   let mem = members.filter(member => !users.includes(member.login));
   let reviewer = mem[Math.floor(Math.random() * mem.length)].login;
