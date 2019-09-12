@@ -34,7 +34,7 @@ async function prCreated(context, recheck) {
   let unsignedUsers = await getUnsignedUsers(users);
   if (!unsignedUsers || unsignedUsers.length === 0) {
     await createStatus(context, true, recheck);
-    return createPullRequestReview(context);
+    return createPullRequestReview(context, users);
   }
   return updateClaStatusForUnsignedUsers(context, unsignedUsers, recheck)
 }
@@ -59,7 +59,7 @@ async function createPullRequestReview(context, users) {
 
 async function getUnsignedUsers(users) {
   let unsignedUsers = [];
-  for (let user in users) {
+  for (let user of users) {
     if (!user.includes('[bot]') && !(await data.hasSignedCLA(user))){
       unsignedUsers.push(user);
     }
