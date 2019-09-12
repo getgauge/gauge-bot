@@ -32,7 +32,7 @@ async function updateClaStatusForUnsignedUsers(context, unsignedUsers) {
 async function prCreated(context, recheck) {
   let users = await getCommitUsers(context);
   let unsignedUsers = getUnsignedUsers(users);
-  if (unsignedUsers.length === 0) {
+  if (unsignedUsers && unsignedUsers.length === 0) {
     await createStatus(context, true, recheck);
     return createPullRequestReview(context);
   }
