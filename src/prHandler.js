@@ -49,9 +49,9 @@ async function createPRReviewRequest(context, users) {
   if (isBotUser(context.payload.pull_request.user.login)) return;
   const ownerLogin = context.payload.organization.login;
   const repoName = context.payload.repository.name;
-  let reviewTeam = (await context.github.repos.listTeams({owner: "getgauge", repo: "gaugebot-test"}))
+  let reviewTeam = (await context.github.teams.list({org: "getgauge"}))
     .data.find(team => team.name === "Reviewers");
-  if (!reviewTeam || reviewTeam.length === 0) {
+  if (!reviewTeam) {
     context.log("Cannot find team with name 'Reviewers'");
     return;
   }
