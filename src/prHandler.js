@@ -1,8 +1,9 @@
 const labels = require('./labels');
 const comments = require('./comments');
 const messages = require('./messages');
-const { isBotUser } = require('./util')
-const data = require('./data')
+const { isBotUser } = require('./util');
+const data = require('./data');
+const { createProjectCard, PR_CONTENT_TYPE } = require('./projects');
 
 async function createStatus(context, state, recheck) {
   if (state) {
@@ -33,7 +34,10 @@ async function updateClaStatusForUnsignedUsers(context, unsignedUsers) {
 async function prUpdated(context, recheck) {
   let users = await getCommitUsers(context);
   await updateClAStatus(users, context, recheck);
-  return createPRReviewRequest(context, users);
+  if (context.payload.action === 'opened') {
+    await createPRReviewRequest(context, users);
+    await createProjectCard(context, context.payload.pull_request.id, PR_CONTENT_TYPE);
+  }
 }
 
 async function updateClAStatus(users, context, recheck) {
@@ -45,7 +49,6 @@ async function updateClAStatus(users, context, recheck) {
 }
 
 async function createPRReviewRequest(context, users) {
-  if (context.payload.action !== 'opened') return;
   if (isBotUser(context.payload.pull_request.user.login)) return;
   const ownerLogin = context.payload.organization.login;
   const repoName = context.payload.repository.name;
@@ -68,7 +71,7 @@ async function createPRReviewRequest(context, users) {
 
 async function getUnsignedUsers(users) {
   let unsignedUsers = [];
-  for (let user of users) {
+  for(let user of users) {
     if (!isBotUser(user) && !(await data.hasSignedCLA(user))){
       unsignedUsers.push(user);
     }
@@ -82,7 +85,7 @@ async function getCommitUsers(context) {
     head: context.payload.pull_request.head.sha
   }));
   let users = [];
-  for (const { author, committer } of compare.data.commits) {
+  for(const { author, committer } of compare.data.commits) {
     if (!author || !committer) continue;
     let authorLogin = author.login;
     let committerLogin = committer.login;

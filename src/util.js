@@ -9,5 +9,10 @@ module.exports = {
 
   isBotUser: function(user) {
     return user.includes('[bot]')
+  },
+
+  isOrgMember: async function(context, user) {
+    let members = await context.github.orgs.getMembers({ org: 'getgauge' });
+    return members.data.some(member => member.login === user);
   }
 };
