@@ -5,6 +5,7 @@ const excludeRepoForNightlyComment = ['taiko', 'screenshot', 'gauge_screenshot',
 module.exports = {
     ISSUE_CONTENT_TYPE: "Issue",
     PR_CONTENT_TYPE: "PullRequest",
+    GAUGE_READY_FOR_DEV_COLUMN_NAME: "Ready for Development",
     createSupportCard: async function (context) {
         let p = context.github.projects
         let issueId = context.payload.issue.id;
@@ -26,13 +27,13 @@ module.exports = {
         if (columnName !== "Testing") return;
         await comments.addComment(context, messages.nightlyComment(), orgName, repoName, issueID);
     },
-    createProjectCard: async function (context, contentID, contentType) {
+    createProjectCard: async function (context, contentID, contentType, columnName) {
         let p = context.github.projects;
         let projects = (await p.listForOrg({ org: "getgauge", state: "open" }))
             .data.filter(d => d.name.startsWith("Gauge Q"));
         for(let project of projects) {
             let raisedColumnID = (await p.listColumns({ project_id: project.id }))
-                .data.find(c => c.name == 'Backlog').id;
+                .data.find(c => c.name == columnName).id;
             await p.createCard({ column_id: raisedColumnID, content_id: contentID, content_type: contentType });
         }
     }  

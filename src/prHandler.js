@@ -3,7 +3,7 @@ const comments = require('./comments');
 const messages = require('./messages');
 const { isBotUser } = require('./util');
 const data = require('./data');
-const { createProjectCard, PR_CONTENT_TYPE } = require('./projects');
+const { createProjectCard, PR_CONTENT_TYPE, GAUGE_READY_FOR_DEV_COLUMN_NAME } = require('./projects');
 
 async function createStatus(context, state, recheck) {
   if (state) {
@@ -36,7 +36,7 @@ async function prUpdated(context, recheck) {
   await updateClAStatus(users, context, recheck);
   if (context.payload.action === 'opened') {
     await createPRReviewRequest(context, users);
-    await createProjectCard(context, context.payload.pull_request.id, PR_CONTENT_TYPE);
+    await createProjectCard(context, context.payload.pull_request.id, PR_CONTENT_TYPE, GAUGE_READY_FOR_DEV_COLUMN_NAME);
   }
 }
 
