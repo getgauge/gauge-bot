@@ -3,6 +3,8 @@ const comments = require('./comments');
 const messages = require('./messages');
 const { isBotUser } = require('./util');
 const data = require('./data');
+const { Random, MersenneTwister19937 } = require('random-js');
+const random = new Random(MersenneTwister19937.autoSeed());
 const { createProjectCard, PR_CONTENT_TYPE, GAUGE_READY_FOR_DEV_COLUMN_NAME } = require('./projects');
 
 async function createStatus(context, state, recheck) {
@@ -60,7 +62,7 @@ async function createPRReviewRequest(context, users) {
   }
   let members = (await context.github.teams.listMembers({team_id: reviewTeam.id})).data;
   let mem = members.filter(member => !users.includes(member.login));
-  let reviewer = mem[Math.floor(Math.random() * mem.length)].login;
+  let reviewer = random.pick(mem).login;
   await context.github.pullRequests.createReviewRequest({ 
     owner: ownerLogin, 
     repo: repoName, 

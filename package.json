@@ -26,7 +26,8 @@
     "passport": "^0.4.0",
     "passport-github": "^1.1.0",
     "pg": "^7.4.3",
-    "probot": "^7.0.0"
+    "probot": "^7.0.0",
+    "random-js": "^2.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.17.2",
