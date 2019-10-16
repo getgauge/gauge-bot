@@ -11,11 +11,5 @@ module.exports = {
         return 'This PR has been verified.' +
             ' The gauge team will be looking into this soon.' +
             '\n\n/cc @getgauge/core';
-    },
-
-    nightlyComment: function () {
-        let d = new Date();
-        let dateString = [d.getDate(), d.getMonth()+1, d.getFullYear()].join('-');
-        return 'The fix should be available in nightly >= ' + dateString;
     }
 }
