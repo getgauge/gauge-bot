@@ -18,7 +18,7 @@ module.exports = {
     createProjectCard: async function (context, contentID, contentType, columnName) {
         let p = context.github.projects;
         let projects = (await p.listForOrg({ org: "getgauge", state: "open" }))
-            .data.filter(d => d.name.startsWith("Gauge Q"));
+            .data.filter(d => d.name.startsWith("Gauge+Taiko Q"));
         for(let project of projects) {
             let raisedColumnID = (await p.listColumns({ project_id: project.id }))
                 .data.find(c => c.name == columnName).id;
