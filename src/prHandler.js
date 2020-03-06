@@ -3,14 +3,16 @@ const comments = require('./comments');
 const messages = require('./messages');
 const { isBotUser } = require('./util');
 const data = require('./data');
+const axios = require('axios').default;
 const { Random, MersenneTwister19937 } = require('random-js');
+
 const random = new Random(MersenneTwister19937.autoSeed());
 const { createProjectCard, PR_CONTENT_TYPE, GAUGE_READY_FOR_DEV_COLUMN_NAME } = require('./projects');
 
 async function createStatus(context, state, recheck) {
   if (state) {
     const ownerLogin = context.payload.organization.login;
-    const repoName = context.payload.repository.name;  
+    const repoName = context.payload.repository.name;
     let number = context.payload.pull_request.number;
     if (recheck) await comments.addComment(context, messages.claVerified(), ownerLogin, repoName, number);
     await labels.add(context, number, 'cla-signed', '1CA50F');
@@ -54,27 +56,27 @@ async function createPRReviewRequest(context, users) {
   if (isBotUser(context.payload.pull_request.user.login)) return;
   const ownerLogin = context.payload.organization.login;
   const repoName = context.payload.repository.name;
-  let reviewTeam = (await context.github.teams.list({org: "getgauge"}))
+  let reviewTeam = (await context.github.teams.list({ org: "getgauge" }))
     .data.find(team => team.name === "Reviewers");
   if (!reviewTeam) {
     context.log("Cannot find team with name 'Reviewers'");
     return;
   }
-  let members = (await context.github.teams.listMembers({team_id: reviewTeam.id})).data;
+  let members = (await context.github.teams.listMembers({ team_id: reviewTeam.id })).data;
   let mem = members.filter(member => !users.includes(member.login));
   let reviewer = random.pick(mem).login;
-  await context.github.pullRequests.createReviewRequest({ 
-    owner: ownerLogin, 
-    repo: repoName, 
-    number: context.payload.pull_request.number, 
+  await context.github.pullRequests.createReviewRequest({
+    owner: ownerLogin,
+    repo: repoName,
+    number: context.payload.pull_request.number,
     reviewers: [reviewer]
   });
 }
 
 async function getUnsignedUsers(users) {
   let unsignedUsers = [];
-  for(let user of users) {
-    if (!isBotUser(user) && !(await data.hasSignedCLA(user))){
+  for (let user of users) {
+    if (!isBotUser(user) && !(await data.hasSignedCLA(user))) {
       unsignedUsers.push(user);
     }
   }
@@ -87,7 +89,7 @@ async function getCommitUsers(context) {
     head: context.payload.pull_request.head.sha
   }));
   let users = [];
-  for(const { author, committer } of compare.data.commits) {
+  for (const { author, committer } of compare.data.commits) {
     if (!author || !committer) continue;
     let authorLogin = author.login;
     let committerLogin = committer.login;
@@ -99,4 +101,33 @@ async function getCommitUsers(context) {
   return users;
 }
 
-module.exports = prUpdated;
+async function prClosed(context) {
+  let labels = context.payload.pull_request.labels;
+  let merged = context.payload.pull_request.merged;
+  let owner = context.payload.pull_request.base.repo.owner.login;
+  let repo = context.payload.pull_request.base.repo.name;
+
+  if (merged && labels.some(e => e.name == 'ReleaseCandidate')) {
+    try {
+      let response = await axios.post('https://api.github.com/repos/' + owner + '/' + repo + '/deployments', {
+        "ref": "master",
+        "required_contexts": [],
+        "environment": "production"
+      }, {
+        headers: {
+          'Authorization': 'token ' + process.env.GAUGEBOT_GITHUB_TOKEN,
+          'Accept': 'application/vnd.github.ant-man-preview+json',
+          'Content-Type': 'application/json',
+        },
+      })
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
+
+module.exports = {
+  prUpdated,
+  prClosed
+};

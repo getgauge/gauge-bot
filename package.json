@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^15.9.5",
+    "axios": "^0.19.2",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.6.1",
