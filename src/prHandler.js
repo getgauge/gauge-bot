@@ -127,7 +127,21 @@ async function prClosed(context) {
   }
 }
 
+
+async function prLabeled(context) {
+  let label = context.payload.label;
+  let creator = context.payload.pull_request.user.login;
+  let owner = context.payload.pull_request.base.repo.owner.login;
+  let repo = context.payload.pull_request.base.repo.name;
+  let number = context.payload.pull_request.number;
+  if (label.name === 'ReleaseCandidate') {
+    let message = messages.bumpVersion(creator, owner, repo);
+    await comments.addComment(context, message, owner, repo, number);
+  }
+}
+
 module.exports = {
   prUpdated,
-  prClosed
+  prClosed,
+  prLabeled
 };
