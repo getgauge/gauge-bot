@@ -15,7 +15,7 @@ function indexHandler (_, res) {
 }
 
 function claHandler (req, res) {
-  let refererUrl = req.get('Referrer') || process.env.REERRER;
+  let refererUrl = req.get('Referrer') || process.env.REFERRER;
   if(refererUrl) res.cookie('referer_url', refererUrl);
   let s = fs.readFileSync('./views/cla.ejs', 'utf8');
   renderPageWithLayout(s, res);
