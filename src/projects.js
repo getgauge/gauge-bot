@@ -24,6 +24,6 @@ module.exports = {
                 .data.find(c => c.name == columnName).id;
             await p.createCard({ column_id: raisedColumnID, content_id: contentID, content_type: contentType });
         }
-    }  
+    }
 }
 

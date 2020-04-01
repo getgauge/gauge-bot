@@ -18,15 +18,7 @@
     "lint": "standard --fix"
   },
   "dependencies": {
-    "@octokit/rest": "^15.9.5",
     "axios": "^0.19.2",
-    "body-parser": "^1.18.3",
-    "cookie-parser": "^1.4.3",
-    "ejs": "^2.6.1",
-    "express-session": "^1.15.6",
-    "passport": "^0.4.0",
-    "passport-github": "^1.1.0",
-    "pg": "^7.4.3",
     "probot": "^7.0.0",
     "random-js": "^2.1.0"
   },

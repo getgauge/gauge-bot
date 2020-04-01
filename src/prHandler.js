@@ -2,7 +2,6 @@ const labels = require('./labels');
 const comments = require('./comments');
 const messages = require('./messages');
 const { isBotUser } = require('./util');
-const data = require('./data');
 const axios = require('axios').default;
 const { Random, MersenneTwister19937 } = require('random-js');
 
@@ -37,20 +36,13 @@ async function updateClaStatusForUnsignedUsers(context, unsignedUsers) {
 
 async function prUpdated(context, recheck) {
   let users = await getCommitUsers(context);
-  await updateClAStatus(users, context, recheck);
   if (context.payload.action === 'opened') {
     await createPRReviewRequest(context, users);
     await createProjectCard(context, context.payload.pull_request.id, PR_CONTENT_TYPE, GAUGE_READY_FOR_DEV_COLUMN_NAME);
   }
 }
 
-async function updateClAStatus(users, context, recheck) {
-  let unsignedUsers = await getUnsignedUsers(users);
-  if (!unsignedUsers || unsignedUsers.length === 0) {
-    return createStatus(context, true, recheck);
-  }
-  return updateClaStatusForUnsignedUsers(context, unsignedUsers, recheck);
-}
+
 
 async function createPRReviewRequest(context, users) {
   if (isBotUser(context.payload.pull_request.user.login)) return;
@@ -71,16 +63,6 @@ async function createPRReviewRequest(context, users) {
     number: context.payload.pull_request.number,
     reviewers: [reviewer]
   });
-}
-
-async function getUnsignedUsers(users) {
-  let unsignedUsers = [];
-  for (let user of users) {
-    if (!isBotUser(user) && !(await data.hasSignedCLA(user))) {
-      unsignedUsers.push(user);
-    }
-  }
-  return unsignedUsers;
 }
 
 async function getCommitUsers(context) {
