@@ -18,7 +18,7 @@
     "lint": "standard --fix"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "probot": "^7.0.0",
     "random-js": "^2.1.0"
   },
