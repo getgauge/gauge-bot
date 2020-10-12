@@ -12,7 +12,8 @@ module.exports = {
   },
 
   isOrgMember: async function(context, user) {
-    let members = await context.github.orgs.getMembers({ org: 'getgauge' });
+    console.log(context.github.orgs);
+    let members = await context.github.orgs.listMembers({ org: 'getgauge' });
     return members.data.some(member => member.login === user);
   }
 };
