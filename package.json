@@ -25,7 +25,7 @@
   "devDependencies": {
     "nodemon": "^2.0.4",
     "smee-client": "^1.0.2",
-    "standard": "^14.3.4"
+    "standard": "^15.0.1"
   },
   "engines": {
     "node": ">= 8.3.0"
