@@ -8,32 +8,6 @@ const { Random, MersenneTwister19937 } = require('random-js');
 const random = new Random(MersenneTwister19937.autoSeed());
 const { createProjectCard, PR_CONTENT_TYPE, GAUGE_READY_FOR_DEV_COLUMN_NAME } = require('./projects');
 
-async function createStatus(context, state, recheck) {
-  if (state) {
-    const ownerLogin = context.payload.organization.login;
-    const repoName = context.payload.repository.name;
-    let number = context.payload.pull_request.number;
-    if (recheck) await comments.addComment(context, messages.claVerified(), ownerLogin, repoName, number);
-    await labels.add(context, number, 'cla-signed', '1CA50F');
-  }
-  let status = context.repo({
-    state: state ? 'success' : 'failure',
-    context: 'verification/cla-signed',
-    targetURl: '',
-    sha: context.payload.pull_request.head.sha
-  })
-  return context.github.repos.createStatus(status);
-}
-
-async function updateClaStatusForUnsignedUsers(context, unsignedUsers) {
-  let users = unsignedUsers.map(u => `@${u}`);
-  const ownerLogin = context.payload.organization.login;
-  const repoName = context.payload.repository.name;
-  let number = context.payload.pull_request.number;
-  await comments.addComment(context, messages.claNotice(users.join(', ')), ownerLogin, repoName, number);
-  return createStatus(context, false);
-}
-
 async function prUpdated(context, recheck) {
   let users = await getCommitUsers(context);
   if (context.payload.action === 'opened') {
@@ -41,7 +15,6 @@ async function prUpdated(context, recheck) {
     await createProjectCard(context, context.payload.pull_request.id, PR_CONTENT_TYPE, GAUGE_READY_FOR_DEV_COLUMN_NAME);
   }
 }
-
 
 
 async function createPRReviewRequest(context, users) {

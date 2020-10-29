@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "axios": "^0.21.0",
-    "probot": "^10.8.0",
+    "probot": "^10.10.0",
     "random-js": "^2.1.0"
   },
   "devDependencies": {
