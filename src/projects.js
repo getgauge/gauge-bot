@@ -1,6 +1,3 @@
-const comments = require('./comments');
-const messages = require('./messages');
-
 module.exports = {
     ISSUE_CONTENT_TYPE: "Issue",
     PR_CONTENT_TYPE: "PullRequest",
