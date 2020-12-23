@@ -3,7 +3,7 @@ const issueCommentHandler = require('./src/issueCommentHandler');
 const issueLabelHandler = require('./src/issueLabelHandler');
 const { prUpdated, prClosed, prLabeled } = require('./src/prHandler');
 
-module.exports = ({app}) => {
+module.exports = (app) => {
   app.on(['issues.opened', 'issues.reopened'], issueHandler);
   app.on(['issue_comment.created', 'issue_comment.edited'], issueCommentHandler);
   app.on(['issues.labeled'], issueLabelHandler);
