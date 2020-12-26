@@ -3,7 +3,7 @@ module.exports = {
     PR_CONTENT_TYPE: "PullRequest",
     GAUGE_READY_FOR_DEV_COLUMN_NAME: "Ready for Development",
     createSupportCard: async function (context) {
-        let p = context.github.projects
+        let p = context.octokit.projects
         let issueId = context.payload.issue.id;
         let projectID = (await p.listForOrg({ org: "getgauge", state: "open" }))
             .data.find(d => d.name == 'Support').id;
@@ -13,7 +13,7 @@ module.exports = {
     },
 
     createProjectCard: async function (context, contentID, contentType, columnName) {
-        let p = context.github.projects;
+        let p = context.octokit.projects;
         let projects = (await p.listForOrg({ org: "getgauge", state: "open" }))
             .data.filter(d => d.name.startsWith("Gauge+Taiko"));
         for(let project of projects) {

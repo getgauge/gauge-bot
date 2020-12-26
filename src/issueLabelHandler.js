@@ -16,7 +16,7 @@ module.exports = async (context) => {
       repo: context.payload.repository.name,
       issue_number: context.payload.issue.number
     }
-    await context.github.issues.update({
+    await context.octokit.issues.update({
       ...params,
       state: 'closed'
     });

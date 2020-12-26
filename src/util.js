@@ -12,7 +12,7 @@ module.exports = {
   },
 
   isOrgMember: async function(context, user) {
-    let members = await context.github.orgs.listMembers({ org: 'getgauge' });
+    let members = await context.octokit.orgs.listMembers({ org: 'getgauge' });
     return members.data.some(member => member.login === user);
   }
 };
