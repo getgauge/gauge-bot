@@ -6,19 +6,19 @@
 
 ## Setup
 
-Set follwing environment variables :-
+Set following environment variables :-
 
 APP_ID=the id of the gaugebot app
 
-WEBHOOK_PROXY_URL=a proxy URL which will redirect the github payload to localhost ( use smee.io)
+WEBHOOK_PROXY_URL=a proxy URL which will redirect the github payload to localhost (use smee.io)
 
-PRIVATE_KEY_PATH=private key (crtificate) for the gaugebot app.
+PRIVATE_KEY_PATH=private key (certificate) for the gaugebot app.
 
 CLIENT_ID=the client id for the app.
 
-CLIENT_SECRET=cleint secret for the app
+CLIENT_SECRET=client secret for the app
 
-CONTRIBUTOR_URL= a secret url to list the availabe contributors
+CONTRIBUTOR_URL= a secret url to list the available contributors
 
 APP_URL=the app url.
 
