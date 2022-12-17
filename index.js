@@ -1,9 +1,9 @@
-const issueHandler = require('./src/issueHandler');
-const issueCommentHandler = require('./src/issueCommentHandler');
-const issueLabelHandler = require('./src/issueLabelHandler');
-const { prUpdated, prClosed, prLabeled } = require('./src/prHandler');
+import issueHandler from './src/issueHandler';
+import issueCommentHandler from './src/issueCommentHandler';
+import issueLabelHandler from './src/issueLabelHandler';
+import { prUpdated, prClosed, prLabeled } from './src/prHandler';
 
-module.exports = (app) => {
+export default (app) => {
   app.on(['issues.opened', 'issues.reopened'], issueHandler);
   app.on(['issue_comment.created', 'issue_comment.edited'], issueCommentHandler);
   app.on(['issues.labeled'], issueLabelHandler);
