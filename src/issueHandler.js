@@ -1,9 +1,9 @@
-const projects = require('./projects');
-const { isOrgMember } = require('./util');
+import { createSupportCard } from './projects';
+import { isOrgMember } from './util';
 
-module.exports = async (context) => {
+export default async (context) => {
   let isMember = await isOrgMember(context, context.payload.issue.user.login);
   if (!isMember) {
-    await projects.createSupportCard(context, context.payload.issue.number);
+    await createSupportCard(context, context.payload.issue.number);
   }
 };

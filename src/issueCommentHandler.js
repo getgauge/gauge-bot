@@ -1,9 +1,9 @@
-const util = require('./util')
-const { prUpdated } = require('./prHandler');
+import { isPRComment, shouldRecheckPR } from './util';
+import { prUpdated } from './prHandler';
 
-module.exports = async (context) => {
+export default async (context) => {
   let p = context.payload;
-  if (util.isPRComment(p) && util.shouldRecheckPR(p)) {
+  if (isPRComment(p) && shouldRecheckPR(p)) {
     let pr = await context.octokit.pullRequests.get(context.repo({ number: context.payload.issue.number }));
     context.payload.pull_request = pr.data;
     return prUpdated(context, true);
