@@ -1,18 +1,16 @@
-module.exports = {
-  shouldRecheckPR: function (payload) {
+export function shouldRecheckPR(payload) {
     return payload.comment.body.includes('@gaugebot recheck');
-  },
+}
 
-  isPRComment: function (payload) {
+export function isPRComment(payload) {
     return !!payload.issue.pull_request;
-  },
+}
 
-  isBotUser: function(user) {
-    return user.includes('[bot]')
-  },
+export function isBotUser(user) {
+    return user.includes('[bot]');
+}
 
-  isOrgMember: async function(context, user) {
+export async function isOrgMember(context, user) {
     let members = await context.octokit.orgs.listMembers({ org: 'getgauge' });
     return members.data.some(member => member.login === user);
-  }
-};
+}
