@@ -18,7 +18,7 @@ export default (app, { getRouter }) => {
   router.use(require("express").static("public"));
 
   // Add a new route
-  router.get("/check", (req, res) => {
-    res.send("Ok!");
-  });
+  router.get("/check", function(req, res) {
+          res.send("Ok!");
+      });
 }
