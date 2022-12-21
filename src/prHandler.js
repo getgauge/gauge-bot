@@ -1,6 +1,5 @@
 import { addComment } from './comments';
 import { bumpVersion } from './messages';
-import axios from 'axios';
 import { createProjectCard, PR_CONTENT_TYPE, GAUGE_READY_FOR_DEV_COLUMN_NAME } from './projects';
 
 export async function prUpdated(context) {
@@ -17,16 +16,18 @@ export async function prClosed(context) {
 
   if (merged && labels.some(e => e.name == 'ReleaseCandidate')) {
     try {
-      let response = await axios.post(`https://api.github.com/repos/${owner}/${repo}/deployments`, {
-        "ref": "master",
-        "required_contexts": [],
-        "environment": "production"
-      }, {
+      let response = await fetch(`https://api.github.com/repos/${owner}/${repo}/deployments`, {
+        method: 'POST',
         headers: {
           'Authorization': 'token ' + process.env.GAUGEBOT_GITHUB_TOKEN,
           'Accept': 'application/vnd.github.ant-man-preview+json',
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          "ref": "master",
+          "required_contexts": [],
+          "environment": "production"
+        }),
       })
       console.log(response);
     } catch (error) {

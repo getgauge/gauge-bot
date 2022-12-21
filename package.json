@@ -20,7 +20,6 @@
   },
   "dependencies": {
     "@probot/adapter-aws-lambda-serverless": "^3.0.1",
-    "axios": "^1.2.1",
     "probot": "^12.0.0",
     "random-js": "^2.1.0"
   },
