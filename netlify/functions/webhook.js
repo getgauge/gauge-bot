@@ -1,9 +1,9 @@
 import { createProbot } from "probot";
 
-import appFn from "../../index";
+import app from "../../index";
 
 const probot = createProbot();
-const loadingApp = probot.load(appFn);
+const loadingApp = probot.load(app);
 
 /**
  * Netlify function to handle webhook event requests from GitHub
