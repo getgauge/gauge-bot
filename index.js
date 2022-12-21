@@ -19,6 +19,6 @@ export default (app, { getRouter }) => {
 
   // Add a new route
   router.get("/check", function(req, res) {
-          res.send("Ok!");
-      });
+    res.send("Ok!");
+  });
 }
