@@ -69,7 +69,6 @@ function bot(app) {
 }
 
 const probot = createProbot();
-console.log("loaded!")
 const loadingApp = probot.load(bot);
 
 /**
