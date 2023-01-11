@@ -100,7 +100,7 @@ export async function handler(event, _context) {
       body: '{"ok":true}',
     };
   } catch (error) {
-    app.log.error(error);
+    console.error(error);
 
     return {
       statusCode: error.status || 500,
