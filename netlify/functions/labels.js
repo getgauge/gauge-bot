@@ -4,16 +4,14 @@ async function hasLabel(context, issueNumber, label) {
     return Promise.resolve(labels.data.some(l => l.name === label));
 }
 
-module.exports = {
-    add: async function (context, issueNumber, label, color) {
-        if (await hasLabel(context, issueNumber, label)) return Promise.resolve();
-        try {
-            await context.octokit.issues.getLabel(context.repo({ name: label }));
-        } catch (error) {
-            await context.octokit.issues.createLabel(context.repo({ name: label, color: color }));
-        }
-        return context.octokit.issues.addLabels(context.repo({ number: issueNumber, labels: [label] }));
-    },
-
+export async function add(context, issueNumber, label, color) {
+    if (await hasLabel(context, issueNumber, label))
+        return Promise.resolve();
+    try {
+        await context.octokit.issues.getLabel(context.repo({ name: label }));
+    } catch (error) {
+        await context.octokit.issues.createLabel(context.repo({ name: label, color: color }));
+    }
+    return context.octokit.issues.addLabels(context.repo({ number: issueNumber, labels: [label] }));
 }
 

@@ -11,7 +11,7 @@ const loadingApp = probot.load(app);
  * @param {import("@netlify/functions").HandlerEvent} event
  * @param {import("@netlify/functions").HandlerContext} _context
  */
-exports.handler = async function (event, _context) {
+export async function handler(event, _context) {
   try {
     await loadingApp;
 
