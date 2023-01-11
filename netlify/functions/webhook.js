@@ -20,9 +20,8 @@ function app() {
 }
 
 const probot = createProbot();
-const loadingApp = probot.load({
-  appFn: app
-});
+console.log("loaded!")
+const loadingApp = probot.load(app);
 
 /**
  * Netlify function to handle webhook event requests from GitHub
