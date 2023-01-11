@@ -1,6 +1,5 @@
 {
   "name": "gauge-bot",
-  "type": "module",
   "version": "1.0.0",
   "description": "A Probot app",
   "author": "BugDiver <vinaysh@thoughtworks.com>",

@@ -1,9 +1,28 @@
 import { createProbot } from "probot";
 
-import app from "./index";
+import issueHandler from './issueHandler';
+import issueCommentHandler from './issueCommentHandler';
+import issueLabelHandler from './issueLabelHandler';
+import { prUpdated, prClosed, prLabeled } from './prHandler';
+
+/**
+ * @param {import('probot').Probot} app
+ */
+function app() {
+
+  app.on(['issues.opened', 'issues.reopened'], issueHandler);
+  app.on(['issue_comment.created', 'issue_comment.edited'], issueCommentHandler);
+  app.on(['issues.labeled'], issueLabelHandler);
+  app.on(['pull_request.opened', 'pull_request.synchronize', 'pull_request.reopened'], prUpdated);
+  app.on(['pull_request.closed'], prClosed);
+  app.on(['pull_request.labeled'], prLabeled);
+
+}
 
 const probot = createProbot();
-const loadingApp = probot.load(app);
+const loadingApp = probot.load({
+  appFn: app
+});
 
 /**
  * Netlify function to handle webhook event requests from GitHub
