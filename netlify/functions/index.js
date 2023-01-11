@@ -1,7 +1,7 @@
-import issueHandler from './src/issueHandler';
-import issueCommentHandler from './src/issueCommentHandler';
-import issueLabelHandler from './src/issueLabelHandler';
-import { prUpdated, prClosed, prLabeled } from './src/prHandler';
+import issueHandler from './issueHandler';
+import issueCommentHandler from './issueCommentHandler';
+import issueLabelHandler from './issueLabelHandler';
+import { prUpdated, prClosed, prLabeled } from './prHandler';
 
 /**
  * @param {import('probot').Probot} app

@@ -1,6 +1,6 @@
 import { createProbot } from "probot";
 
-import app from "../../index";
+import app from "./index";
 
 const probot = createProbot();
 const loadingApp = probot.load(app);
