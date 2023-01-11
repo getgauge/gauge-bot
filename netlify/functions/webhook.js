@@ -63,14 +63,14 @@ async function prLabeled(context) {
 /**
  * @param {import('probot').Probot} app
  */
-function app() {
+function bot(app) {
   app.on(['pull_request.closed'], prClosed);
   app.on(['pull_request.labeled'], prLabeled);
 }
 
 const probot = createProbot();
 console.log("loaded!")
-const loadingApp = probot.load(app);
+const loadingApp = probot.load(bot);
 
 /**
  * Netlify function to handle webhook event requests from GitHub
