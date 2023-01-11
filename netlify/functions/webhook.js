@@ -1,22 +1,71 @@
 import { createProbot } from "probot";
 
-import issueHandler from './issueHandler';
-import issueCommentHandler from './issueCommentHandler';
-import issueLabelHandler from './issueLabelHandler';
-import { prUpdated, prClosed, prLabeled } from './prHandler';
+async function addComment(context, message, owner, repo, number) {
+    const issueComment = { owner: owner, repo: repo, issue_number: number, body: message };
+    await context.octokit.issues.createComment(issueComment);
+}
+
+function bumpVersion(creator, owner, repo) {
+  return `@${creator} Thank you for contributing to ${repo}. Your pull request has been labeled ` +
+    `as a release candidate 🎉🎉.\n\n` +
+
+    `Merging this PR will trigger a release.\n\n` +
+
+    `### Please bump up the version as part of this PR.\n\n` +
+
+    `Instructions to bump the version can found at ` +
+    `[CONTRIBUTING.md](https://github.com/${owner}/${repo}/blob/master/CONTRIBUTING.md)\n\n` +
+
+    `If the CONTRIBUTING.md file does not exist or does not include instructions about bumping up the ` +
+    `version, please looks previous commits in git history to see what changes need to be done.`
+}
+
+async function prClosed(context) {
+  let labels = context.payload.pull_request.labels;
+  let merged = context.payload.pull_request.merged;
+  let owner = context.payload.pull_request.base.repo.owner.login;
+  let repo = context.payload.pull_request.base.repo.name;
+
+  if (merged && labels.some(e => e.name == 'ReleaseCandidate')) {
+    try {
+      let response = await fetch(`https://api.github.com/repos/${owner}/${repo}/deployments`, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'token ' + process.env.GAUGEBOT_GITHUB_TOKEN,
+          'Accept': 'application/vnd.github.ant-man-preview+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "ref": "master",
+          "required_contexts": [],
+          "environment": "production"
+        }),
+      })
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
+
+async function prLabeled(context) {
+  let label = context.payload.label;
+  let creator = context.payload.pull_request.user.login;
+  let owner = context.payload.pull_request.base.repo.owner.login;
+  let repo = context.payload.pull_request.base.repo.name;
+  let number = context.payload.pull_request.number;
+  if (label.name === 'ReleaseCandidate') {
+    let message = bumpVersion(creator, owner, repo);
+    await addComment(context, message, owner, repo, number);
+  }
+}
 
 /**
  * @param {import('probot').Probot} app
  */
 function app() {
-
-  app.on(['issues.opened', 'issues.reopened'], issueHandler);
-  app.on(['issue_comment.created', 'issue_comment.edited'], issueCommentHandler);
-  app.on(['issues.labeled'], issueLabelHandler);
-  app.on(['pull_request.opened', 'pull_request.synchronize', 'pull_request.reopened'], prUpdated);
   app.on(['pull_request.closed'], prClosed);
   app.on(['pull_request.labeled'], prLabeled);
-
 }
 
 const probot = createProbot();
