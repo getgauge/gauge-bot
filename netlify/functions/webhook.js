@@ -24,11 +24,11 @@ async function prClosed(context) {
   let labels = context.payload.pull_request.labels;
   let merged = context.payload.pull_request.merged;
   let owner = context.payload.pull_request.base.repo.owner.login;
-  let repo = context.payload.pull_request.base.repo.name;
+  let repo = context.payload.pull_request.base.repo;
 
   if (merged && labels.some(e => e.name == 'ReleaseCandidate')) {
     try {
-      let response = await fetch(`https://api.github.com/repos/${owner}/${repo}/deployments`, {
+      let response = await fetch(`https://api.github.com/repos/${owner}/${repo.name}/deployments`, {
         method: 'POST',
         headers: {
           'Authorization': 'token ' + process.env.GAUGEBOT_GITHUB_TOKEN,
@@ -36,12 +36,13 @@ async function prClosed(context) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "ref": "master",
+          "ref": `${repo.default_branch}`,
           "required_contexts": [],
           "environment": "production"
         }),
       })
-      console.log(response);
+      const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.error(error);
     }
